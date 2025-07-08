@@ -1,11 +1,10 @@
 
 from flask import Flask, render_template, request, url_for
-import joblib
 import pandas as pd
+from sklearn.linear_model import LinearRegression
 
 app = Flask(__name__)
 
-player_model = joblib.load("models/points_predictor.pkl")
 player_data = pd.read_csv("data/combined_player_game_logs.csv")
 
 player_image_ids = {
@@ -22,6 +21,16 @@ def get_player_image_url(name):
         return f"https://cdn.nba.com/headshots/nba/latest/1040x760/{player_id}.png"
     return url_for('static', filename='default_player.png')
 
+def train_model():
+    X = [
+        [30, 5, 8, 1],
+        [35, 7, 10, 0],
+        [32, 6, 4, 1]
+    ]
+    y = [25, 30, 28]
+    model = LinearRegression().fit(X, y)
+    return model
+
 @app.route('/')
 def index():
     return render_template("index.html")
@@ -37,12 +46,21 @@ def predict():
         return render_template("index.html", result="No data available for this player.", player_img_url=player_img_url)
 
     recent_game = recent.iloc[-1]
-    input_data = pd.DataFrame([{
-        'Minutes': recent_game['Minutes'],
-        'Assists': recent_game['Assists'],
-        'Rebounds': recent_game['Rebounds'],
-        'Home': 1 if recent_game['Home/Away'] == 'Home' else 0
-    }])
-    prediction = player_model.predict(input_data)[0]
+    input_data = [[
+        recent_game["Minutes"],
+        recent_game["Assists"],
+        recent_game["Rebounds"],
+        1 if recent_game["Home/Away"] == "Home" else 0
+    ]]
+    model = train_model()
+    prediction = model.predict(input_data)[0]
     result = f"{player_name} is predicted to score {prediction:.1f} points vs {opponent}"
     return render_template("index.html", result=result, player_img_url=player_img_url)
+
+@app.route('/rookie')
+def rookie():
+    return render_template("rookie.html")
+
+@app.route('/charts')
+def charts():
+    return render_template("charts.html")
