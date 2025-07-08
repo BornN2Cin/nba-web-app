@@ -1,39 +1,55 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>NBA Player Predictor</title>
-    <style>
-        body { font-family: Arial; padding: 20px; }
-        .container { max-width: 600px; margin: auto; }
-        .prediction-box { border: 1px solid #ccc; padding: 20px; border-radius: 5px; }
-        .image-col { float: left; margin-right: 20px; }
-        .info-col { overflow: hidden; }
-        .image-col img { height: 150px; border-radius: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <title>NBA Web App</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
-    <div class="container">
-        <h1>NBA Player Prediction</h1>
-        <form action="/predict" method="POST">
-            <input type="text" name="player_name" placeholder="Player Name" required>
-            <input type="text" name="opponent" placeholder="Opponent Team" required>
-            <button type="submit">Predict</button>
-        </form>
-
-        {% if result %}
-        <div class="prediction-box">
-            <div class="image-col">
-                <img src="{{ player_img_url }}" alt="Player Image">
-            </div>
-            <div class="info-col">
-                <h3>{{ result }}</h3>
-            </div>
-        </div>
-        {% endif %}
-
-        <p><a href="/rookie">View Rookie Scouting</a> |
-           <a href="/charts">View Charts</a></p>
+<body class="bg-zinc-900 text-white min-h-screen font-sans">
+  <nav class="bg-zinc-800 shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-white">🏀 NBA Predictor</h1>
+    <div class="space-x-4">
+      <a href="/" class="text-white hover:text-yellow-400">Home</a>
+      <a href="/rookie" class="text-white hover:text-yellow-400">Rookies</a>
+      <a href="/charts" class="text-white hover:text-yellow-400">Charts</a>
     </div>
+  </nav>
+
+  <main class="max-w-3xl mx-auto py-10 px-4">
+    <h2 class="text-3xl font-semibold text-center mb-8">Predict Player Performance</h2>
+
+    <form action="/predict" method="POST" class="bg-zinc-800 rounded-xl p-6 shadow-lg space-y-4">
+      <div>
+        <label class="block text-sm mb-1">Player Name</label>
+        <input type="text" name="player_name" placeholder="e.g., LeBron James" required
+               class="w-full px-4 py-2 rounded bg-zinc-700 text-white placeholder-zinc-400 focus:outline-none">
+      </div>
+      <div>
+        <label class="block text-sm mb-1">Opponent Team</label>
+        <input type="text" name="opponent" placeholder="e.g., Warriors" required
+               class="w-full px-4 py-2 rounded bg-zinc-700 text-white placeholder-zinc-400 focus:outline-none">
+      </div>
+      <button type="submit"
+              class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 px-6 rounded">
+        Predict
+      </button>
+    </form>
+
+    {% if result %}
+    <div class="mt-10 bg-zinc-800 rounded-xl p-6 shadow-lg flex items-center space-x-6">
+      <img src="{{ player_img_url }}" alt="Player Image"
+           class="h-28 w-28 object-cover rounded-full border-4 border-yellow-400">
+      <div>
+        <h3 class="text-xl font-bold mb-2">Prediction Result</h3>
+        <p class="text-lg text-yellow-300">{{ result }}</p>
+      </div>
+    </div>
+    {% endif %}
+  </main>
+
+  <footer class="text-center text-sm text-zinc-500 mt-10 mb-6">
+    &copy; {{year}} NBA Predictor App. Built with Flask + Tailwind.
+  </footer>
 </body>
 </html>
