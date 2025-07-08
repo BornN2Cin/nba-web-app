@@ -1,4 +1,6 @@
-
+import os
+import sqlite3
+from datetime import datetime
 from flask import Flask, render_template, request, url_for
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -68,3 +70,13 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
+def log_prediction(player_name, opponent, predicted_points, game_date=None):
+    db_path = os.path.join(app.instance_path, "nba_predictions.db")
+    conn = sqlite3.connect(db_path)
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO predictions (player_name, opponent, predicted_points, game_date)
+        VALUES (?, ?, ?, ?)
+    """, (player_name, opponent, predicted_points, game_date))
+    conn.commit()
+    conn.close()
