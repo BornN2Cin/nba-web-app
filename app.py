@@ -2,7 +2,6 @@
 from flask import Flask, render_template, request, url_for
 import joblib
 import pandas as pd
-import os
 
 app = Flask(__name__)
 
@@ -47,11 +46,3 @@ def predict():
     prediction = player_model.predict(input_data)[0]
     result = f"{player_name} is predicted to score {prediction:.1f} points vs {opponent}"
     return render_template("index.html", result=result, player_img_url=player_img_url)
-
-@app.route('/rookie')
-def rookie():
-    return render_template("rookie.html")
-
-@app.route('/charts')
-def charts():
-    return render_template("charts.html")
