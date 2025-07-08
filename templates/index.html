@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NBA Player Predictor</title>
+    <style>
+        body { font-family: Arial; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .prediction-box { border: 1px solid #ccc; padding: 20px; border-radius: 5px; }
+        .image-col { float: left; margin-right: 20px; }
+        .info-col { overflow: hidden; }
+        .image-col img { height: 150px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NBA Player Prediction</h1>
+        <form action="/predict" method="POST">
+            <input type="text" name="player_name" placeholder="Player Name" required>
+            <input type="text" name="opponent" placeholder="Opponent Team" required>
+            <button type="submit">Predict</button>
+        </form>
+
+        {% if result %}
+        <div class="prediction-box">
+            <div class="image-col">
+                <img src="{{ player_img_url }}" alt="Player Image">
+            </div>
+            <div class="info-col">
+                <h3>{{ result }}</h3>
+            </div>
+        </div>
+        {% endif %}
+
+        <p><a href="/rookie">View Rookie Scouting</a> |
+           <a href="/charts">View Charts</a></p>
+    </div>
+</body>
+</html>
