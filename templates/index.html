@@ -5,6 +5,13 @@
   <title>NBA Web App</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    function showSpinner() {
+      const btn = document.getElementById('predictBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<svg class="animate-spin h-5 w-5 text-black mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="black" stroke-width="4" fill="none" /><path class="opacity-75" fill="black" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"/></svg>';
+    }
+  </script>
 </head>
 <body class="bg-zinc-900 text-white min-h-screen font-sans">
   <nav class="bg-zinc-800 shadow px-6 py-4 flex justify-between items-center">
@@ -19,7 +26,7 @@
   <main class="max-w-3xl mx-auto py-10 px-4">
     <h2 class="text-3xl font-semibold text-center mb-8">Predict Player Performance</h2>
 
-    <form action="/predict" method="POST" class="bg-zinc-800 rounded-xl p-6 shadow-lg space-y-4">
+    <form action="/predict" method="POST" class="bg-zinc-800 rounded-xl p-6 shadow-lg space-y-4" onsubmit="showSpinner()">
       <div>
         <label class="block text-sm mb-1">Player Name</label>
         <input type="text" name="player_name" placeholder="e.g., LeBron James" required
@@ -27,11 +34,16 @@
       </div>
       <div>
         <label class="block text-sm mb-1">Opponent Team</label>
-        <input type="text" name="opponent" placeholder="e.g., Warriors" required
-               class="w-full px-4 py-2 rounded bg-zinc-700 text-white placeholder-zinc-400 focus:outline-none">
+        <select name="opponent" required
+                class="w-full px-4 py-2 rounded bg-zinc-700 text-white focus:outline-none">
+          <option value="">Select a team</option>
+          {% for team in teams %}
+          <option value="{{ team }}">{{ team }}</option>
+          {% endfor %}
+        </select>
       </div>
-      <button type="submit"
-              class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 px-6 rounded">
+      <button id="predictBtn" type="submit"
+              class="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-2 px-6 rounded w-full">
         Predict
       </button>
     </form>
@@ -43,6 +55,9 @@
       <div>
         <h3 class="text-xl font-bold mb-2">Prediction Result</h3>
         <p class="text-lg text-yellow-300">{{ result }}</p>
+        {% if team_logo_url %}
+        <img src="{{ team_logo_url }}" alt="Team Logo" class="h-12 mt-2">
+        {% endif %}
       </div>
     </div>
     {% endif %}
