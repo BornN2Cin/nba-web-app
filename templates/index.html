@@ -27,7 +27,19 @@
       {% if team_logo_url %}
       <img src="{{ team_logo_url }}" alt="Team logo" class="w-16 h-16 object-contain" />
       {% endif %}
-      <p class="text-lg font-semibold">{{ result }}</p>
+      <div class="mt-6 w-full bg-blue-50 p-4 rounded-xl shadow-md flex items-center space-x-4">
+  {% if player_img_url %}
+    <img src="{{ player_img_url }}" alt="Player image" class="w-20 h-20 object-cover rounded-full border-2 border-blue-300" />
+  {% endif %}
+  <div>
+    <h2 class="text-xl font-bold">{{ player_name }}</h2>
+    <p class="text-gray-700">{{ result }}</p>
+    {% if team_logo_url %}
+      <img src="{{ team_logo_url }}" alt="Team logo" class="w-12 h-12 mt-2 object-contain" />
+    {% endif %}
+  </div>
+</div>
+
     </div>
     {% endif %}
   </div>
