@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NBA Predictor</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col items-center justify-center">
+  <div class="w-full max-w-3xl p-6 bg-white rounded-xl shadow-md">
+    <h1 class="text-3xl font-bold mb-4 text-center">NBA Prediction</h1>
+    <form method="POST" action="/predict" class="space-y-4">
+      <input name="player_name" placeholder="Enter player name" class="w-full p-2 border border-gray-300 rounded" required />
+      <select name="opponent" class="w-full p-2 border border-gray-300 rounded" required>
+        {% for team in teams %}
+        <option value="{{ team }}">{{ team }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition">Predict</button>
+    </form>
+
+    {% if result %}
+    <div class="mt-6 flex items-center space-x-4">
+      {% if player_img_url %}
+      <img src="{{ player_img_url }}" alt="Player image" class="w-20 h-20 object-cover rounded-full border" />
+      {% endif %}
+      {% if team_logo_url %}
+      <img src="{{ team_logo_url }}" alt="Team logo" class="w-16 h-16 object-contain" />
+      {% endif %}
+      <p class="text-lg font-semibold">{{ result }}</p>
+    </div>
+    {% endif %}
+  </div>
+</body>
+</html>
